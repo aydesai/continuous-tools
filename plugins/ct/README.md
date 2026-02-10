@@ -24,17 +24,7 @@ Continuous Team plugin for Claude Code. Provides shared commands, agents, and sk
 - `@fullstack-testing-expert` — Vitest, Playwright E2E, xUnit, and integration testing strategies
 - `@integration-workflow-expert` — Workflow execution, third-party API integrations, OAuth/SAML, webhooks
 - `@react-typescript-expert` — React 18+/TypeScript, Material-UI, Recoil, TanStack Query, ReactFlow
-- `@thoughts-analyzer` — Deep-dive research on topics (research equivalent of codebase-analyzer)
-- `@thoughts-locator` — Discover relevant documents in the thoughts/ directory
 - `@web-search-researcher` — Web search for information beyond training data
-
-### Skills (auto-loaded by context)
-- **csharp-dotnet** — C#/.NET patterns and conventions
-- **python** — Python patterns and conventions
-- **typescript** — TypeScript/Node.js patterns and conventions
-- **react** — React component and hook patterns
-- **postgresql** — PostgreSQL schema and query patterns
-- **sqlserver** — SQL Server schema and query patterns
 
 ## Installation
 
