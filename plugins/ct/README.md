@@ -9,7 +9,9 @@ Continuous Team plugin for Claude Code. Provides shared commands, agents, and sk
 - `/ct:create-plan` — Interactive planning process for features and tasks
 - `/ct:create-spec` — Interactive feature specification creation
 - `/ct:implement-plan` — Implement a development plan with validation phases
+- `/ct:info` — Display the plugin dashboard with logo, version, mode, and available commands/agents
 - `/ct:mode` — Switch between Quality and Balanced model modes
+- `/ct:research-codebase` — Research the codebase with parallel agents and generate a documented report
 - `/ct:review-code` — Delegate code reviews to specialized agents
 - `/ct:review-plan` — Review plans for ambiguity and completeness
 - `/ct:review-spec` — Review specs for clarity and identify needed clarifications
