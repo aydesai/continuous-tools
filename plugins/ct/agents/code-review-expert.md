@@ -2,6 +2,7 @@
 name: code-review-expert
 description: Comprehensive code reviews, security analysis, and code quality assessment
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 1
 ---
 
 **When to use this agent:**

@@ -2,6 +2,19 @@
 
 You are tasked with creating comprehensive feature specifications through an interactive, iterative process. You will gather requirements, clarify ambiguities, and produce a detailed specification document suitable for implementation planning.
 
+## Mode-Aware Model Selection
+
+**Before spawning any agent sub-tasks**, read `plugins/ct/config/mode.md` to determine the active mode.
+
+Apply the following model assignment when using the Task tool:
+- **Quality mode**: Use `model: opus` for Tier 1 and Tier 2 agents, `model: sonnet` for Tier 3 agents
+- **Balanced mode**:
+  - Use `model: opus` for **Tier 1** agents: `codebase-analyzer`, `code-review-expert`, `debug-investigator`
+  - Use `model: sonnet` for **Tier 2** agents: `codebase-pattern-finder`, `web-search-researcher`, and all implementation/testing agents
+  - Use `model: haiku` for **Tier 3** agents: `codebase-locator`
+
+Always include the `model` parameter on every Task tool call based on the active mode and the agent's tier.
+
 ## Initial Response
 
 ## Handling User Input
@@ -42,7 +55,7 @@ Then wait for the user's input.
 
 ## Process Steps
 
-**CRITICAL**: This is an interactive, research-driven process. Use specialized agents to gather context from the `/thoughts` directory, codebase, and external sources. Present all findings to the user and engage in dialog before proceeding to requirements gathering.
+**CRITICAL**: This is an interactive, research-driven process. Use specialized agents to gather context from the codebase and external sources. Present all findings to the user and engage in dialog before proceeding to requirements gathering.
 
 ### Step 1: Initial Understanding & Context Gathering
 
@@ -56,31 +69,19 @@ Then wait for the user's input.
 
 2. **RESEARCH PHASE - Critical for comprehensive specs**:
 
-   **a) Search project thoughts directory recursively:**
-   - Use **thoughts-locator** agent to find relevant thoughts, decisions, and discussions in `/thoughts` directory
-   - Look for: architecture decisions, domain knowledge, business rules, past requirements, technical constraints
-   - Present ALL findings to user with summaries
-
-   **b) Analyze located thoughts deeply:**
-   - Use **thoughts-analyzer** agent to deeply examine relevant thought documents
-   - Extract: key decisions, rationale, constraints, patterns, domain knowledge
-   - Identify: related features, dependencies, architectural implications
-   - Present detailed analysis to user for validation
-
-   **c) Research external knowledge when needed:**
+   **a) Research external knowledge when needed:**
    - Use **web-search-researcher** agent when clarification or domain knowledge is critical
    - Research: industry standards, best practices, technical approaches, domain-specific requirements
    - Only when findings would significantly impact spec quality
    - Present research findings to user for discussion
 
-   **d) Search codebase for context:**
+   **b) Search codebase for context:**
    - Use **codebase-locator** to find related existing features
    - Identify patterns and conventions that should be followed
    - Present codebase findings to user
 
    **IMPORTANT**: The research phase is interactive. Present findings incrementally and engage user in dialog:
-   - "I found these relevant thoughts about [topic]. Here's what they tell us..."
-   - "Based on this architecture decision from [date], we need to consider..."
+   - "I found these relevant patterns in the codebase. Here's what they tell us..."
    - "I researched [topic] and found these industry standards. Should we align with them?"
    - Wait for user feedback before proceeding to next research area
 
@@ -539,8 +540,6 @@ Does this capture the expected behavior correctly?
 ## Important Guidelines
 
 1. **Leverage Research Agents Proactively**:
-   - ALWAYS use **thoughts-locator** to search `/thoughts` directory for relevant context
-   - Use **thoughts-analyzer** to deeply examine discovered thoughts
    - Use **web-search-researcher** when domain knowledge or clarification would improve spec quality
    - Use **codebase-locator** to find existing patterns and features
    - Present ALL findings to user - this builds shared understanding

@@ -1,3 +1,5 @@
+# Review Feature Specification
+
 The user input to you can be provided directly by the agent or as a command argument - you MUST consider it before proceeding with the prompt (if not empty).
 
 User input:
@@ -5,6 +7,19 @@ User input:
 $ARGUMENTS
 
 Goal: Validate that the feature specification is clear, complete, and ready to break down into implementation plans. Detect and reduce ambiguity, missing requirements, or incomplete sections, and record clarifications directly in the spec file. This spec will drive the `/create_plan` command to produce implementation plans for AI coding agents. It is IMPERATIVE that requirements are unambiguous, testable, and complete enough to enable accurate planning.
+
+## Mode-Aware Model Selection
+
+**Before spawning any agent sub-tasks**, read `plugins/ct/config/mode.md` to determine the active mode.
+
+Apply the following model assignment when using the Task tool:
+- **Quality mode**: Use `model: opus` for Tier 1 and Tier 2 agents, `model: sonnet` for Tier 3 agents
+- **Balanced mode**:
+  - Use `model: opus` for **Tier 1** agents: `codebase-analyzer`, `code-review-expert`, `debug-investigator`
+  - Use `model: sonnet` for **Tier 2** agents: `codebase-pattern-finder`, `web-search-researcher`, and all implementation/testing agents
+  - Use `model: haiku` for **Tier 3** agents: `codebase-locator`
+
+Always include the `model` parameter on every Task tool call based on the active mode and the agent's tier.
 
 Note: This review workflow is expected to run (and be completed) AFTER `/create_spec` and BEFORE `/create_plan`. If the user explicitly states they are skipping review (e.g., simple feature, time-boxed spike), you may proceed, but must warn that downstream planning quality may suffer.
 

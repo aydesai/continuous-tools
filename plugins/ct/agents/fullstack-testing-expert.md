@@ -2,6 +2,7 @@
 name: fullstack-testing-expert
 description: Comprehensive testing strategies across frontend and backend, including unit tests, integration tests, and E2E tests
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 2
 ---
 
 **When to use this agent:**

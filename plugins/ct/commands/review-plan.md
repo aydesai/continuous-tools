@@ -1,3 +1,5 @@
+# Review Plan
+
 The user input to you can be provided directly by the agent or as a command argument - you MUST consider it before proceeding with the prompt (if not empty).
 
 User input:
@@ -5,6 +7,19 @@ User input:
 $ARGUMENTS
 
 Goal: Detect and reduce ambiguity or missing decision points in the implementation plan and record the clarifications directly in the plan file. This plan will be given to an AI coding agent to implement. It is IMPERITIVE that the goals and directions are clear and the scope is appropriately sized for AI implementation.
+
+## Mode-Aware Model Selection
+
+**Before spawning any agent sub-tasks**, read `plugins/ct/config/mode.md` to determine the active mode.
+
+Apply the following model assignment when using the Task tool:
+- **Quality mode**: Use `model: opus` for Tier 1 and Tier 2 agents, `model: sonnet` for Tier 3 agents
+- **Balanced mode**:
+  - Use `model: opus` for **Tier 1** agents: `codebase-analyzer`, `code-review-expert`, `debug-investigator`
+  - Use `model: sonnet` for **Tier 2** agents: `codebase-pattern-finder`, `web-search-researcher`, and all implementation/testing agents
+  - Use `model: haiku` for **Tier 3** agents: `codebase-locator`
+
+Always include the `model` parameter on every Task tool call based on the active mode and the agent's tier.
 
 Note: This review workflow is expected to run (and be completed) BEFORE invoking /implement_plan. If the user explicitly states they are skipping review (e.g., exploratory spike), you may proceed, but must warn that downstream rework risk increases.
 

@@ -2,6 +2,19 @@
 
 You are tasked with creating detailed implementation plans through an interactive, iterative process. You should be skeptical, thorough, and work collaboratively with the user to produce high-quality technical specifications.
 
+## Mode-Aware Model Selection
+
+**Before spawning any agent sub-tasks**, read `plugins/ct/config/mode.md` to determine the active mode.
+
+Apply the following model assignment when using the Task tool:
+- **Quality mode**: Use `model: opus` for Tier 1 and Tier 2 agents, `model: sonnet` for Tier 3 agents
+- **Balanced mode**:
+  - Use `model: opus` for **Tier 1** agents: `codebase-analyzer`, `code-review-expert`, `debug-investigator`
+  - Use `model: sonnet` for **Tier 2** agents: `codebase-pattern-finder`, `web-search-researcher`, and all implementation/testing agents
+  - Use `model: haiku` for **Tier 3** agents: `codebase-locator`
+
+Always include the `model` parameter on every Task tool call based on the active mode and the agent's tier.
+
 ## Initial Response
 
 When this command is invoked:

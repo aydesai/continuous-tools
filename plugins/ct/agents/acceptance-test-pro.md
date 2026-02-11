@@ -2,6 +2,7 @@
 name: acceptance-test-pro
 description: Comprehensive acceptance testing of implemented features against their specifications
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 2
 ---
 
 **When to use this agent:**

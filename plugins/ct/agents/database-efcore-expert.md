@@ -2,6 +2,7 @@
 name: database-efcore-expert
 description: Expert database design, Entity Framework Core migrations, PostgreSQL optimization, and data modeling
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 2
 ---
 
 **When to use this agent:**

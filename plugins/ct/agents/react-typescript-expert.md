@@ -2,6 +2,7 @@
 name: react-typescript-expert
 description: Expert React 18+ with TypeScript development, Material-UI components, Recoil state management, TanStack Query, and ReactFlow workflow visualization
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 2
 ---
 
 **When to use this agent:**

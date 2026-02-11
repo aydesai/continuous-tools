@@ -1,0 +1,3 @@
+# Mode Configuration
+
+mode: quality

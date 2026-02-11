@@ -3,6 +3,19 @@
 ## Objective
 Delegate code review tasks to the specialized code-review-expert agent. Supports both comprehensive directory reviews and focused reviews of recent changes from plan implementations.
 
+## Mode-Aware Model Selection
+
+**Before spawning any agent sub-tasks**, read `plugins/ct/config/mode.md` to determine the active mode.
+
+Apply the following model assignment when using the Task tool:
+- **Quality mode**: Use `model: opus` for Tier 1 and Tier 2 agents, `model: sonnet` for Tier 3 agents
+- **Balanced mode**:
+  - Use `model: opus` for **Tier 1** agents: `codebase-analyzer`, `code-review-expert`, `debug-investigator`
+  - Use `model: sonnet` for **Tier 2** agents: `codebase-pattern-finder`, `web-search-researcher`, and all implementation/testing agents
+  - Use `model: haiku` for **Tier 3** agents: `codebase-locator`
+
+Always include the `model` parameter on every Task tool call based on the active mode and the agent's tier.
+
 ## Input Parameters & Mode Detection
 - **Directory Path**: Comprehensive review of all code files in the directory
 - **Plan File Path**: Focused review of code changes from implementing the plan

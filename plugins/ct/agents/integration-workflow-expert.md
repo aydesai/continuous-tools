@@ -2,6 +2,7 @@
 name: integration-workflow-expert
 description: Workflow execution engine, third-party API integrations, OAuth/SAML flows, webhook handling, and iPaaS integration patterns
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 2
 ---
 
 **When to use this agent:**

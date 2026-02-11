@@ -2,6 +2,7 @@
 name: debug-investigator
 description: Bug investigation, unexpected behavior analysis, and system malfunction resolution
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 1
 ---
 
 **When to use this agent:**

@@ -2,6 +2,7 @@
 name: dotnet-backend-expert
 description: Expert .NET backend development, ASP.NET Core APIs, Entity Framework Core, CQRS/MediatR patterns, and C# system architecture
 tools: Read, Write, Edit, Grep, Glob, Bash
+tier: 2
 ---
 
 **When to use this agent:**
