@@ -1,5 +1,6 @@
 ---
 description: Execute an implementation plan with phased validation
+argument-hint: [plan-file-path]
 ---
 
 # Implement Plan

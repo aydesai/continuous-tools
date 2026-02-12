@@ -1,5 +1,6 @@
 ---
 description: Review a spec for ambiguity, completeness, and clarity
+argument-hint: [spec-file-path]
 ---
 
 # Review Feature Specification

@@ -1,5 +1,6 @@
 ---
 description: Delegate code reviews to specialized review agents
+argument-hint: [plan-file-path] [directory-path]
 ---
 
 # Code Review

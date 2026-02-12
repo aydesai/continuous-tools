@@ -1,5 +1,6 @@
 ---
 description: Create a detailed feature specification
+argument-hint: [feature-description]
 ---
 
 # Create Feature Specification

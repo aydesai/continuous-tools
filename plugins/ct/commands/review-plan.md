@@ -1,5 +1,6 @@
 ---
 description: Review a plan for ambiguity, completeness, and clarity
+argument-hint: [plan-file-path]
 ---
 
 # Review Plan

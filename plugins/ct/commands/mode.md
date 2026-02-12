@@ -1,5 +1,6 @@
 ---
 description: Switch between Quality and Balanced modes
+argument-hint: [quality] [balanced]
 ---
 
 # Set Plugin Mode

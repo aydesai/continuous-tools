@@ -1,6 +1,6 @@
 ---
 description: Create a detailed implementation plan
-argument-hint: [spec-path] [research-doc-path]
+argument-hint: [spec-path] [research-file-path]
 ---
 
 # Create Plan
