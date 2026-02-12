@@ -8,6 +8,7 @@ Continuous Team plugin for Claude Code. Provides shared commands, agents, and sk
 - `/ct:commit` — Create git commits following project conventions
 - `/ct:create-plan` — Interactive planning process for features and tasks
 - `/ct:create-spec` — Interactive feature specification creation
+- `/ct:debug` — Investigate and fix bugs using debug-investigator agent
 - `/ct:implement-plan` — Implement a development plan with validation phases
 - `/ct:info` — Display the plugin dashboard with logo, version, mode, and available commands/agents
 - `/ct:mode` — Switch between Quality and Balanced model modes

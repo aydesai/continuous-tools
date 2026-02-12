@@ -36,11 +36,11 @@ You are tasked with displaying the ct plugin's info dashboard. Output the logo, 
 
   Mode        [MODE]
   Agents      14 available
-  Commands    10 loaded
+  Commands    11 loaded
 
   ────────────────────────────────────────────────────────────────────────────────
 
-  Commands (in suggested order of execution)
+  Workflow Commands (in suggested order of execution)
     /ct:create-spec              Create a feature specification interactively
     /ct:review-spec              Review a spec for clarity and completeness
     /ct:research-codebase        Research a particular aspect of the codebase in depth
@@ -49,6 +49,9 @@ You are tasked with displaying the ct plugin's info dashboard. Output the logo, 
     /ct:implement-plan           Execute a plan with incremental validation
     /ct:commit                   Create a git commit following project conventions
     /ct:review-code              Delegate a code review to a specialized agent
+
+  Additional Commands
+    /ct:debug                    Investigate and fix bugs with debug-investigator
     /ct:mode                     Switch between Quality and Balanced modes
     /ct:info                     Show this dashboard
 
