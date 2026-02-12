@@ -1,3 +1,7 @@
+---
+description: Switch between Quality and Balanced modes
+---
+
 # Set Plugin Mode
 
 You are tasked with viewing or changing the ct plugin's operating mode. The mode controls which AI models are used for different agent tiers.

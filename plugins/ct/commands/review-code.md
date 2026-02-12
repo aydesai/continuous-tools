@@ -1,3 +1,7 @@
+---
+description: Delegate code reviews to specialized review agents
+---
+
 # Code Review
 
 ## Objective

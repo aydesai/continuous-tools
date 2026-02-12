@@ -1,3 +1,7 @@
+---
+description: Create a detailed feature specification
+---
+
 # Create Feature Specification
 
 You are tasked with creating comprehensive feature specifications through an interactive, iterative process. You will gather requirements, clarify ambiguities, and produce a detailed specification document suitable for implementation planning.

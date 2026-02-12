@@ -1,3 +1,7 @@
+---
+description: Execute an implementation plan with phased validation
+---
+
 # Implement Plan
 
 You are tasked with implementing an approved technical plan from the referenced file. These plans contain phases with specific changes and success criteria.

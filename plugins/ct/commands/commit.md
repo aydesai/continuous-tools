@@ -1,3 +1,7 @@
+---
+description: Create git commits following project conventions
+---
+
 # Commit Changes
 
 You are tasked with creating git commits for the changes made during this session.
