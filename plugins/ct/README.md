@@ -34,18 +34,26 @@ Continuous Team plugin for Claude Code. Provides shared commands, agents, and sk
 
 ### Mode System
 
-The plugin supports two operating modes that control which AI models are used for agent sub-tasks. Switch modes with `/ct:mode`.
+The plugin supports two operating modes that control which AI models are used for agent sub-tasks: `Quality` (default) or `Balanced`.
 
-| Mode | Tier 1 (Planning/Analysis) | Tier 2 (Execution/Research) | Tier 3 (Search/Locate) |
-|------|----------------------------|------------------------------|-------------------------|
-| **Quality** (default) | Opus | Opus | Sonnet |
-| **Balanced** | Opus | Sonnet | Haiku |
+Switch modes with `/ct:mode`.
 
-**Tier 1 agents** (always Opus): `codebase-analyzer`, `code-review-expert`, `debug-investigator`
-**Tier 2 agents** (Opus or Sonnet): `codebase-pattern-finder`, `web-search-researcher`, and all implementation/testing agents
-**Tier 3 agents** (Sonnet or Haiku): `codebase-locator`
-
-Configuration is stored in `config/mode.md`.
+| Agent | Quality Mode | Balanced Mode |
+|-------|--------------|---------------|
+| `codebase-analyzer` | Opus | Opus |
+| `code-review-expert` | Opus | Opus |
+| `debug-investigator` | Opus | Opus |
+| `codebase-pattern-finder` | Opus | Sonnet |
+| `web-search-researcher` | Opus | Sonnet |
+| `acceptance-test-pro` | Opus | Sonnet |
+| `database-efcore-expert` | Opus | Sonnet |
+| `dotnet-backend-expert` | Opus | Sonnet |
+| `fullstack-testing-expert` | Opus | Sonnet |
+| `integration-workflow-expert` | Opus | Sonnet |
+| `nextjs-fullstack-expert` | Opus | Sonnet |
+| `python-pro-backend` | Opus | Sonnet |
+| `react-typescript-expert` | Opus | Sonnet |
+| `codebase-locator` | Sonnet | Haiku |
 
 ## Installation
 
