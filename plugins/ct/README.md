@@ -49,9 +49,31 @@ Configuration is stored in `config/mode.md`.
 
 ## Installation
 
+### Manual
+
 ```
-/plugin marketplace add https://dev.azure.com/SMATechnologies/Internal/_git/ClaudeCode
+/plugin marketplace add smatechnologies/continuous-tools
 /plugin install ct@continuous-tools
+```
+
+### Auto-prompt for a project
+
+Add this to your project's `.claude/settings.json` so team members are automatically prompted to install when they open the project:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "continuous-tools": {
+      "source": {
+        "source": "github",
+        "repo": "smatechnologies/continuous-tools"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ct@continuous-tools": true
+  }
+}
 ```
 
 ## Updates
