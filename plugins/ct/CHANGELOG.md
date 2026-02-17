@@ -2,6 +2,10 @@
 
 All notable changes to the **ct** plugin will be documented in this file.
 
+## [1.0.2] - 2026-02-17
+### Improved
+- `/ct:create-plan` now writes a separate plan file per phase instead of collapsing all phases into a single file. Each phase file is self-contained with its own tasks, code examples, testing checklist, and cross-phase dependency references.
+
 ## [1.0.1] - 2026-02-13
 ### Fixed
 - Updated `/ct:debug` command and `debug-investigator` agent to more consistently show all potential solutions.

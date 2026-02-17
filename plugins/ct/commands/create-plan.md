@@ -226,11 +226,14 @@ Once aligned on approach:
 
 After structure approval:
 
-1. **Write the plan** to `project_docs/[git-branch-name]/Phase_[num]_Implementation_Plan.md` where:
+1. **Write a separate plan file for EACH phase** approved in Step 3. For every phase (1, 2, 3, etc.), write a file to `project_docs/[git-branch-name]/Phase_[num]_Implementation_Plan.md` where:
    - `[git-branch-name]` is the current git branch name
-   - `[num]` is the phase number (1, 2, 3, etc.)
+   - `[num]` is the phase number (1, 2, 3, etc.) — one file per phase
    - Create the directory if it doesn't exist
-2. **Use the exact PLAN_TEMPLATE.md format**:
+   - **CRITICAL**: If Step 3 proposed N phases and the user approved them, you MUST produce N separate files (e.g., `Phase_1_...`, `Phase_2_...`, `Phase_3_...`). Do NOT collapse all phases into a single file.
+   - Each phase file should be self-contained: it should include its own tasks, code examples, testing checklist, and success criteria relevant to that phase
+   - Cross-reference other phase files in the "Dependencies and Prerequisites" or "Related plans" sections where applicable
+2. **Use the exact PLAN_TEMPLATE.md format for each phase file**:
 
 ```markdown
 # Plan [NUMBER]: [DESCRIPTIVE TITLE]
@@ -414,16 +417,20 @@ new_function() {
 
 **Announce**: > **Step 6/6: Final Review** — Presenting the plan for your review...
 
-1. **Present the draft plan location**:
+1. **Present all draft plan locations**:
    ```
-   I've created the implementation plan at:
-   `project_docs/[git-branch-name]/Phase_[num]_Implementation_Plan.md`
+   I've created the implementation plans at:
+   - `project_docs/[git-branch-name]/Phase_1_Implementation_Plan.md` — [Phase 1 summary]
+   - `project_docs/[git-branch-name]/Phase_2_Implementation_Plan.md` — [Phase 2 summary]
+   - `project_docs/[git-branch-name]/Phase_3_Implementation_Plan.md` — [Phase 3 summary]
+   (list all phases)
 
-   Please review it and let me know:
+   Please review each phase and let me know:
    - Are the tasks properly scoped with specific file changes?
    - Are the code examples concrete and actionable?
    - Do the Current State Analysis symbols (✅❌⚠️) accurately reflect reality?
    - Are the Critical Implementation Rules and Common Pitfalls specific to this task?
+   - Are cross-phase dependencies correctly documented?
    - Missing edge cases or considerations?
    ```
 
