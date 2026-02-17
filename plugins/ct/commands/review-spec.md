@@ -84,42 +84,35 @@ Execution steps:
    c. Based on findings, take ONE of these paths:
 
    **Path A - Answer found with high confidence:**
-   Present the question AND your discovery to the user:
-   ```
-   Q: <the question>
+   Output the question and your discovery as context, then immediately call `AskUserQuestion` inline:
+   - First, output:
+     ```
+     Q: <the question>
 
-   **Codebase discovery:** <what you found, with file references>
+     **Codebase discovery:** <what you found, with file references>
 
-   **Proposed answer:** <your recommended answer based on findings>
-
-   | Option | Description |
-   |--------|-------------|
-   | Accept | Use the proposed answer above |
-   | Override | Provide a different answer |
-   ```
-   If user selects "Accept", use the proposed answer. If "Override", use their input.
+     **Proposed answer:** <your recommended answer based on findings>
+     ```
+   - Then call `AskUserQuestion` with:
+     - Question: the question text
+     - Options: "Accept" (use the proposed answer above), "Override" (provide a different answer)
+   - If user selects "Accept", use the proposed answer. If "Override", use their input.
+   - **Do NOT output the question as plain text and end your response.**
 
    **Path B - Answer NOT discoverable from code:**
-   Present the question normally (as in step 5) with multiple-choice or short-answer format.
+   Present the question normally (as in step 5) using `AskUserQuestion` with multiple-choice options.
 
    This step ensures the user is only asked questions that genuinely require human judgment or domain knowledge - NOT questions an AI can answer by reading the code.
 
 5. Sequential questioning loop (interactive):
-   - Present EXACTLY ONE question at a time.
-   - For code-discoverable questions (from step 4), present using the Path A format with your discovery and proposed answer.
-   - For non-code-discoverable questions, use multiple-choice format as a Markdown table:
-
-   | Option | Description |
-   |--------|-------------|
-   | A | <Option A description> |
-   | B | <Option B description> |
-   | C | <Option C description> | (add D/E as needed up to 5)
-   | Short | Provide a different short answer | (Include only if free-form alternative is appropriate)
-
-   - For short-answer style (no meaningful discrete options), output a single line after the question: `Format: Short answer`.
+   - Present EXACTLY ONE question at a time using the `AskUserQuestion` tool.
+   - For code-discoverable questions (from step 4), present using the Path A format: output your discovery as context, then call `AskUserQuestion` with "Accept"/"Override" options.
+   - For non-code-discoverable questions, call `AskUserQuestion` with 2-4 distinct options that capture the most likely answers. Include a short description for each option.
+   - For short-answer style (no meaningful discrete options), call `AskUserQuestion` with 2-3 likely answers as options — the user can always select "Other" to provide a custom response.
+   - **CRITICAL**: Use the `AskUserQuestion` tool for EVERY question so the user answers inline in the running prompt. Do NOT output questions as plain text and end your response.
    - After the user answers:
      * Validate the answer maps to one option or is a custom short answer.
-     * If ambiguous, ask for a quick disambiguation (count still belongs to same question; do not advance).
+     * If ambiguous, call `AskUserQuestion` again for a quick disambiguation (count still belongs to same question; do not advance).
      * Once satisfactory, record it in working memory (do not yet write to disk) and move to the next queued question.
    - Stop asking further questions when:
      * All critical ambiguities resolved (remaining queued items become unnecessary), OR
