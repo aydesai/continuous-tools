@@ -36,7 +36,7 @@ You are tasked with displaying the ct plugin's info dashboard. Output the logo, 
 ### Plugin Status
 | | |
 |---|---|
-| **Version** | [1.0.2](https://github.com/smatechnologies/continuous-tools/blob/main/plugins/ct/CHANGELOG.md)|
+| **Version** | [1.0.3](https://github.com/smatechnologies/continuous-tools/blob/main/plugins/ct/CHANGELOG.md)|
 | **Mode** | [MODE] |
 | **Agents** | 14 available |
 | **Commands** | 11 loaded |

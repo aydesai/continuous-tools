@@ -29,22 +29,9 @@ When this command is invoked:
    - Immediately read any provided files FULLY
    - Begin the research process
 
-2. **If no parameters provided**, respond with:
-```
-I'll help you create a detailed implementation plan. Let me start by understanding what we're building.
-
-Please provide:
-1. The task/ticket description (or reference to a ticket file)
-2. Any relevant context, constraints, or specific requirements
-3. Links to related research or previous implementations
-
-I'll analyze this information and work with you to create a comprehensive plan.
-
-Tip: You can also invoke this command with a ticket file directly: `/create_plan path/to/ticket.md`
-For deeper analysis, try: `/create_plan think deeply about path/to/ticket.md`
-```
-
-Then wait for the user's input.
+2. **If no parameters provided**, use the `AskUserQuestion` tool to prompt the user inline:
+   - Call `AskUserQuestion` with a single question asking for the task/ticket description. Example question: "What task or feature are you planning? (Describe it or reference a ticket file like `/create_plan path/to/ticket.md`)"
+   - After receiving the task description, proceed to Step 1 research — do NOT immediately ask follow-up questions about context or constraints. Let the research phase inform what clarifications are actually needed.
 
 ## Progress Signaling
 
@@ -115,22 +102,23 @@ Then wait for the user's input.
    - Note assumptions that need verification
    - Determine true scope based on codebase reality
 
-6. **Present informed understanding and focused questions**:
-   ```
-   Based on the ticket and my research of the codebase, I understand we need to [accurate summary].
+6. **Present informed understanding, then enter sequential questioning loop**:
+   - First, output your research summary:
+     ```
+     Based on the ticket and my research of the codebase, I understand we need to [accurate summary].
 
-   I've found that:
-   - [Current implementation detail with file:line reference]
-   - [Relevant pattern or constraint discovered]
-   - [Potential complexity or edge case identified]
-
-   Questions that my research couldn't answer:
-   - [Specific technical question that requires human judgment]
-   - [Business logic clarification]
-   - [Design preference that affects implementation]
-   ```
-
-   Only ask questions that you genuinely cannot answer through code investigation.
+     I've found that:
+     - [Current implementation detail with file:line reference]
+     - [Relevant pattern or constraint discovered]
+     - [Potential complexity or edge case identified]
+     ```
+   - Then, generate (internally) a prioritized list of questions your research couldn't answer. Only include questions that genuinely require human judgment — NOT questions answerable by reading code.
+   - **Sequential questioning loop**: Present EXACTLY ONE question at a time using the `AskUserQuestion` tool. For each question:
+     - If there are clear discrete options, provide them as `AskUserQuestion` options (2-4 choices)
+     - After the user answers, record the answer and proceed to the next question
+     - Each subsequent question may be informed by prior answers
+     - Stop asking when: all critical ambiguities are resolved, OR the user signals completion ("done", "let's proceed", etc.)
+   - **CRITICAL**: Use the `AskUserQuestion` tool for each question so the user answers inline in the running prompt. Do NOT output questions as plain text and end your response.
 
    **If no questions are needed**, announce to the user:
    ```
@@ -178,24 +166,22 @@ After getting initial clarifications:
 
 3. **Wait for ALL sub-tasks to complete** before proceeding. Only now mark the research phase TaskCreate task as `completed`.
 
-4. **Present findings and design options**:
-   ```
-   Based on my research, here's what I found:
+4. **Present findings and design options, then ask for selection using `AskUserQuestion`**:
+   - First, output your findings:
+     ```
+     Based on my research, here's what I found:
 
-   **Current State:**
-   - [Key discovery about existing code]
-   - [Pattern or convention to follow]
+     **Current State:**
+     - [Key discovery about existing code]
+     - [Pattern or convention to follow]
 
-   **Design Options:**
-   1. [Option A] - [pros/cons]
-   2. [Option B] - [pros/cons]
-
-   **Open Questions:**
-   - [Technical uncertainty]
-   - [Design decision needed]
-
-   Which approach aligns best with your vision?
-   ```
+     **Design Options:**
+     1. [Option A] - [pros/cons]
+     2. [Option B] - [pros/cons]
+     ```
+   - Then immediately call `AskUserQuestion` to get the user's design choice inline. Present each option as a selectable choice (e.g., "Option A: [summary]", "Option B: [summary]").
+   - If there are open questions that affect the design choice, ask them via `AskUserQuestion` BEFORE presenting the design options.
+   - **Do NOT output "Which approach?" as plain text and end your response.**
 
 ### Step 3: Plan Structure Development
 
@@ -203,7 +189,7 @@ After getting initial clarifications:
 
 Once aligned on approach:
 
-1. **Create initial plan outline**:
+1. **Create initial plan outline** — output the proposed structure:
    ```
    Here's my proposed plan structure:
 
@@ -214,11 +200,12 @@ Once aligned on approach:
    1. [Phase name] - [what it accomplishes]
    2. [Phase name] - [what it accomplishes]
    3. [Phase name] - [what it accomplishes]
-
-   Does this phasing make sense? Should I adjust the order or granularity?
    ```
 
-2. **Get feedback on structure** before writing details
+2. **Get feedback on structure using `AskUserQuestion`** — immediately after outputting the outline above, call `AskUserQuestion` to ask the user for approval inline. Example:
+   - Question: "Does this phasing make sense?"
+   - Options: "Approve", "Needs adjustments"
+   - If the user selects an adjustment option, iterate on the structure and ask again until approved.
 
 ### Step 4: Detailed Plan Writing
 
@@ -424,15 +411,13 @@ new_function() {
    - `project_docs/[git-branch-name]/Phase_2_Implementation_Plan.md` — [Phase 2 summary]
    - `project_docs/[git-branch-name]/Phase_3_Implementation_Plan.md` — [Phase 3 summary]
    (list all phases)
-
-   Please review each phase and let me know:
-   - Are the tasks properly scoped with specific file changes?
-   - Are the code examples concrete and actionable?
-   - Do the Current State Analysis symbols (✅❌⚠️) accurately reflect reality?
-   - Are the Critical Implementation Rules and Common Pitfalls specific to this task?
-   - Are cross-phase dependencies correctly documented?
-   - Missing edge cases or considerations?
    ```
+
+2. **Ask for review feedback using `AskUserQuestion`** — immediately after presenting the plan locations, call `AskUserQuestion` to gather feedback inline:
+   - Question: "How do the plans look?"
+   - Options: "Approve", "Needs changes"
+   - If the user selects a change option, iterate and ask again until approved.
+   - **Do NOT output a list of review questions as plain text and end your response.**
 
 3. **Iterate based on feedback** - be ready to:
    - Add missing phases
@@ -455,6 +440,8 @@ new_function() {
    - Get buy-in at each major step
    - Allow course corrections
    - Work collaboratively
+   - **Always use the `AskUserQuestion` tool** for questions so the user can answer inline in the running prompt — never just output questions as text and end your response
+   - Ask ONE question at a time in a sequential loop; never dump all questions at once
 
 3. **Be Thorough**:
    - Read all context files COMPLETELY before planning

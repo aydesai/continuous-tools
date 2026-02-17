@@ -42,21 +42,9 @@ When this command is invoked:
    - If a description or file was provided as a parameter, use it as the starting point
    - Begin the interactive requirements gathering process
 
-2. **If no parameters provided**, respond with:
-```
-I'll help you create a comprehensive feature specification that will drive implementation planning.
-
-Please provide:
-1. A brief description of the feature you want to build
-2. The primary problem this feature solves
-3. Who the target users are
-
-You can also provide a longer description or paste requirements if you have them.
-
-Tip: You can invoke this command with a description directly: `/create_spec <your feature description here>`
-```
-
-Then wait for the user's input.
+2. **If no parameters provided**, use the `AskUserQuestion` tool to prompt the user inline:
+   - Call `AskUserQuestion` with a single question: "What feature do you want to build? Give a brief description, or paste in requirements. (Tip: you can also invoke with `/create_spec <description>` directly.)"
+   - After receiving the description, proceed to Step 1 research — let research inform what follow-up questions are actually needed rather than front-loading generic questions.
 
 ## Progress Signaling
 
@@ -122,53 +110,50 @@ Then wait for the user's input.
    - "I researched [topic] and found these industry standards. Should we align with them?"
    - Wait for user feedback before proceeding to next research area
 
-3. **Present initial understanding and gather core information**:
-   ```
-   Based on your description, I understand you want to build [summary of feature].
-   
-   Let me gather some key information to create a comprehensive specification:
-   
-   **Core Questions:**
-   1. **User Types**: Who are the primary users? Are there different user roles?
-   2. **Key Problem**: What specific problem does this solve? What's the current pain point?
-   3. **Success Metrics**: How will we know this feature is successful?
-   4. **Scope Boundaries**: What should this feature NOT do? Any explicit non-goals?
-   5. **Technical Constraints**: Any existing systems to integrate with? Performance requirements?
-   ```
+3. **Present initial understanding, then enter sequential questioning loop**:
+   - First, output your research summary:
+     ```
+     Based on your description and my research, I understand you want to build [summary of feature].
+
+     Here's what I found in the codebase:
+     - [Relevant existing patterns or features]
+     - [Technical context that informs the spec]
+     ```
+   - Then, generate (internally) a prioritized list of questions your research couldn't answer. Only include questions that genuinely require human judgment. Common areas (ask only what's needed, not all):
+     - **User Types**: Who are the primary users? Different roles?
+     - **Key Problem**: What specific problem does this solve?
+     - **Success Metrics**: How will we know this is successful?
+     - **Scope Boundaries**: What should this NOT do?
+     - **Technical Constraints**: Systems to integrate with? Performance needs?
+   - **Sequential questioning loop**: Present EXACTLY ONE question at a time using the `AskUserQuestion` tool. For each question:
+     - If there are clear discrete options, provide them as `AskUserQuestion` options (2-4 choices)
+     - After the user answers, record the answer and proceed to the next question
+     - Each subsequent question may be informed by prior answers
+     - Stop asking when: all critical areas are covered, OR the user signals completion
+   - **CRITICAL**: Use the `AskUserQuestion` tool for each question so the user answers inline in the running prompt. Do NOT output questions as plain text and end your response.
 
 ### Step 2: Requirements Discovery
 
-**Announce**: > **Step 2/7: Requirements Discovery** — Diving deeper into user journeys, technical constraints, and edge cases...
+**Announce**: > **Step 2/7: Requirements Discovery** — Diving deeper based on your answers so far...
 
-Based on initial answers, dig deeper with targeted questions:
+Continue the sequential questioning loop from Step 1, now digging into requirements. Use the `AskUserQuestion` tool for each question — one at a time, inline.
 
-1. **For User Experience**:
-   ```
-   **User Journey Questions:**
-   - What triggers a user to use this feature?
-   - What's the step-by-step flow from start to finish?
-   - What happens if something goes wrong?
-   - Are there different paths for different user types?
-   ```
+**Question sequence** (ask only what's needed based on prior answers):
 
-2. **For Technical Requirements**:
-   ```
-   **Technical Clarifications:**
-   - Data persistence: What needs to be saved/stored?
-   - Real-time requirements: Any live updates needed?
-   - Security: What access controls are required?
-   - Scale: Expected usage volume?
-   - Integration: What systems does this touch?
-   ```
+1. **User Experience** (ask first, since it shapes everything else):
+   - Use `AskUserQuestion` to ask about the user journey: what triggers use, step-by-step flow, error scenarios
+   - Wait for answer, then proceed to next area
 
-3. **For Edge Cases**:
-   ```
-   **Edge Cases to Consider:**
-   - What happens with invalid/malformed input?
-   - How should the system behave under high load?
-   - What if dependent services are unavailable?
-   - How do we handle concurrent operations?
-   ```
+2. **Technical Requirements** (informed by UX answers):
+   - Use `AskUserQuestion` to ask about data persistence, real-time needs, security, scale, integrations — only the ones genuinely unclear after research
+   - Wait for answer, then proceed
+
+3. **Edge Cases** (now that you have full context):
+   - Propose the edge cases YOU identified from research and prior answers
+   - Use `AskUserQuestion` to confirm: present your proposed list as options, with an "Other" path for additions
+   - Frame as: "Here are the edge cases I think we need to handle. Anything I'm missing?"
+
+**CRITICAL**: Each topic is its own `AskUserQuestion` call. Do NOT present multiple topics in a single question. Do NOT output questions as plain text and end your response.
 
 ### Step 3: User Story Development
 
@@ -188,10 +173,12 @@ Based on initial answers, dig deeper with targeted questions:
       - Priority: [High/Medium/Low]
       - Complexity: [Small/Medium/Large]
    
-   Are there any user stories I'm missing? Should we adjust priorities?
    ```
 
-2. **Refine stories based on feedback**
+2. **Get feedback using `AskUserQuestion`** — immediately after outputting the stories, call `AskUserQuestion` inline:
+   - Question: "How do these user stories look?"
+   - Options: "Approve", "Needs adjustments"
+   - Iterate until the user approves. **Do NOT output questions as plain text and end your response.**
 
 ### Step 4: Acceptance Criteria Development
 
@@ -216,8 +203,12 @@ Let me develop acceptance criteria for each story. I'll start with the highest p
 - Error case: [Description]
 - Edge case: [Description]
 
-Does this capture the expected behavior correctly?
 ```
+
+   Then call `AskUserQuestion` inline to confirm:
+   - Question: "Does this capture the expected behavior?"
+   - Options: "Approve", "Needs adjustments"
+   - Iterate until approved. **Do NOT output questions as plain text and end your response.**
 
 ### Step 5: Functional Requirements Documentation
 
@@ -232,24 +223,27 @@ Does this capture the expected behavior correctly?
    - Performance requirements
    - Integration requirements
 
-2. **Get confirmation on technical approach**:
+2. **Get confirmation on technical approach** — output the proposed approach:
    ```
    Based on the requirements, here's the technical approach I'm considering:
-   
+
    **Data Model:**
    - [Entity 1]: [key fields and relationships]
    - [Entity 2]: [key fields and relationships]
-   
+
    **API Design:**
    - [Endpoint 1]: [method, path, purpose]
    - [Endpoint 2]: [method, path, purpose]
-   
+
    **Key Components:**
    - [Component 1]: [responsibility]
    - [Component 2]: [responsibility]
-   
-   Does this align with your technical vision?
    ```
+
+   Then call `AskUserQuestion` inline to confirm:
+   - Question: "Does this technical approach align with your vision?"
+   - Options: "Approve", "Needs adjustments"
+   - Iterate until approved. **Do NOT output questions as plain text and end your response.**
 
 ### Step 6: Create Feature Specification Document
 
@@ -570,21 +564,21 @@ Does this capture the expected behavior correctly?
 
 **Announce**: > **Step 7/7: Review and Iteration** — Presenting the specification for your review...
 
-1. **Present the specification for review**:
+1. **Present the specification location**:
    ```
    I've created the feature specification at:
    `/project_docs/[branch-name]/[feature-name]-spec.md`
 
-   Please review and let me know:
-   - Are all user stories captured with clear acceptance criteria?
-   - Are the functional requirements specific enough for implementation?
-   - Any missing edge cases or requirements?
-   - Do the technical constraints and architecture align with your vision?
-
    This specification is designed to provide everything needed for the `/create_plan` command to build a comprehensive implementation plan.
    ```
 
-2. **Iterate based on feedback** until the specification is complete
+2. **Ask for review feedback using `AskUserQuestion`** — immediately after presenting the location, call `AskUserQuestion` inline:
+   - Question: "How does the specification look?"
+   - Options: "Approve — ready for planning", "Needs changes"
+   - If the user selects a change option, iterate and ask again until approved.
+   - **Do NOT output review questions as plain text and end your response.**
+
+3. **Iterate based on feedback** until the specification is complete
 
 ## Important Guidelines
 
@@ -600,6 +594,8 @@ Does this capture the expected behavior correctly?
    - Identify hidden assumptions
    - Consider error cases early
    - Use research findings to uncover implicit requirements
+   - **Always use the `AskUserQuestion` tool** for questions so the user can answer inline in the running prompt — never just output questions as text and end your response
+   - Ask ONE question at a time in a sequential loop; never dump all questions at once
 
 3. **Write for Implementation**:
    - Every requirement should be testable

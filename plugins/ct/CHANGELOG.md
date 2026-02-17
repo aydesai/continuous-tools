@@ -2,6 +2,10 @@
 
 All notable changes to the **ct** plugin will be documented in this file.
 
+## [1.0.3] - 2026-02-17
+### Improved
+- `/ct:create-plan` and `/ct:create-spec` now use `AskUserQuestion` for inline interactive questioning — one question at a time in a sequential loop, so users answer directly in the running prompt instead of typing out all answers in a separate message.
+
 ## [1.0.2] - 2026-02-17
 ### Improved
 - `/ct:create-plan` now writes a separate plan file per phase instead of collapsing all phases into a single file. Each phase file is self-contained with its own tasks, code examples, testing checklist, and cross-phase dependency references.
